@@ -1,0 +1,102 @@
+================================================================================
+SWEETY – BLOOD GLUCOSE TRACKER
+================================================================================
+Current Status: LIVE & RUNNING PROPERLY
+Local Time: 2026-11-15
+
+--------------------------------------------------------------------------------
+1. CURRENTLY RUNNING SERVERS
+--------------------------------------------------------------------------------
+
+[FRONTEND CLIENT]
+- Status: RUNNING (HTTP 200 OK)
+- URL: http://localhost:5173
+- Technology: React 19, Vite, Tailwind CSS v3, React Router v7, Recharts, Lucide Icons
+- Running from directory: d:\project\kenpath-sweety\client
+- Process Command: npx vite --port 5173 --host
+
+[BACKEND API SERVER]
+- Status: RUNNING (HTTP 200 OK)
+- URL: http://localhost:5000
+- Health Endpoint: http://localhost:5000/api/health
+- Technology: Node.js, Express.js, Prisma ORM v5, JWT, bcryptjs, PostgreSQL
+- Running from directory: d:\project\kenpath-sweety\server
+- Process Command: node src/server.js
+
+[DATABASE]
+- Engine: PostgreSQL (Port 5432)
+- Database Name: sweety
+- Connection URL: postgresql://postgres:postgres@localhost:5432/sweety?schema=public
+- Seeded Data: 89 glucose readings across 45 days
+
+--------------------------------------------------------------------------------
+2. DEMO LOGIN CREDENTIALS
+--------------------------------------------------------------------------------
+- Email:    john@example.com
+- Password: Demo@123
+
+(You can also register a brand new user account directly on the register screen)
+
+--------------------------------------------------------------------------------
+3. HOW TO RUN MANUALLY (IF STOPPED)
+--------------------------------------------------------------------------------
+
+Step 1: Start PostgreSQL (ensure port 5432 is running)
+
+Step 2: Start the Backend API (Port 5000)
+    cd d:\project\kenpath-sweety\server
+    npm run dev
+    # (or: npm start)
+
+Step 3: Start the Frontend Client (Port 5173)
+    cd d:\project\kenpath-sweety\client
+    npm run dev
+
+Step 4: Open your browser and go to:
+    http://localhost:5173
+
+--------------------------------------------------------------------------------
+4. HOW TO RUN TESTS
+--------------------------------------------------------------------------------
+
+Backend API Tests (24 Integration & Validation Tests):
+    cd d:\project\kenpath-sweety\server
+    npm test
+
+Frontend UI Tests (15 Component & Integration Tests):
+    cd d:\project\kenpath-sweety\client
+    npm test
+
+--------------------------------------------------------------------------------
+5. HOW TO RE-SEED DATABASE
+--------------------------------------------------------------------------------
+If you want to reset and generate fresh 45-day realistic sample data:
+    cd d:\project\kenpath-sweety\server
+    npm run db:seed
+
+--------------------------------------------------------------------------------
+6. KEY PAGES & URLS
+--------------------------------------------------------------------------------
+- Sign In:              http://localhost:5173/login
+- Sign Up:              http://localhost:5173/register
+- Main Dashboard:       http://localhost:5173/dashboard
+- Glucose Readings:     http://localhost:5173/readings
+- Reports & Analytics:  http://localhost:5173/reports
+- Account Settings:     http://localhost:5173/settings
+- API Health Status:    http://localhost:5000/api/health
+
+--------------------------------------------------------------------------------
+7. ARCHITECTURAL & VALIDATION RULES IMPLEMENTED
+--------------------------------------------------------------------------------
+- 4 Clinical Time Slots:
+    1. Morning (fasting)
+    2. After breakfast
+    3. After lunch
+    4. After dinner
+- Value Limits: 40 mg/dL to 600 mg/dL (Values outside rejected)
+- Daily Limit: Max 4 readings per day (Concurrency safe transaction)
+- Duplicate Prevention: Unique per user, date, and time slot
+- Future Dates: Strictly blocked
+- Reports Available: Daily, Month-to-Date, Previous Calendar Month
+- Strict User Isolation: Every action verified via server-side JWT context
+================================================================================
