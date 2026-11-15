@@ -1,7 +1,8 @@
 # Sweety – Blood Glucose Tracker 🩸
 > **Take-Home Assignment for Junior Full Stack Developer – JavaScript & AI**  
 > **Company:** Kenpath  
-> **Author:** Sweety Development Team
+> **Candidate:** Mousigan  
+> **Submission Date:** November 15, 2026
 
 ---
 
@@ -378,21 +379,31 @@ The application includes an Apple-inspired minimalist design:
 
 ---
 
-## 12. Architectural Assumptions & Design Decisions
+## 12. Notes & Assumptions (Required by Kenpath)
 
+### A. Architectural & Domain Assumptions
 1. **Date Storage & Timezones:** To prevent date shifting across timezones (e.g., UTC vs local offsets), all dates are stored as standard `DATE` types in PostgreSQL and parsed to UTC midnight strings (`YYYY-MM-DD`).
 2. **Clinical Safety Disclaimer:** The target blood glucose reference bands (70 mg/dL and 180 mg/dL) shown in charts are labeled as illustrative and do not replace personalized physician guidance.
-3. **Database Concurrency:** Interactive Prisma transactions (`$transaction`) are utilized for reading creation and updates so that race conditions cannot bypass the 4-reading daily limit or duplicate time-slot constraint.
+3. **Database Concurrency:** Interactive Prisma transactions (`$transaction`) are utilized for reading creation and updates so that concurrent API requests cannot bypass the 4-reading daily limit or duplicate time-slot constraint.
 4. **Token Storage:** In addition to HTTP-only cookies, the server accepts `Authorization: Bearer <token>` headers to support programmatic API testing and third-party integrations seamlessly.
+5. **Report Boundaries:** Monthly calculations accurately wrap across year boundaries (e.g. querying in January evaluates December of the previous year).
+
+### B. What I'd Improve With More Time
+- **Export to PDF / CSV:** Add one-click export for patients to take formatted summaries to clinic visits.
+- **Estimated HbA1c ($eAG$):** Compute approximate HbA1c levels using established Nathan formula based on 90-day glucose averages.
+- **Insulin & Carbohydrate Correlation:** Correlate glucose spikes with meal carb counts and rapid-acting insulin units.
+- **Role-Based Doctor Access:** Multi-tenant dashboard allowing endocrinologists to review assigned patient logs.
+- **Push & WhatsApp Reminders:** Daily notification at 9 PM if a user has logged fewer than 4 readings.
 
 ---
 
-## 13. Future Improvements
+## 13. Completed Bonus Tasks
 
-- **Export to PDF / CSV:** Add one-click export for sharing reports with endocrinologists.
-- **HbA1c Estimation:** Calculate estimated HbA1c based on 90-day glucose averages ($eAG$).
-- **Insulin & Carbohydrate Logging:** Correlate glucose spikes with meals and insulin doses.
-- **Multi-Factor Authentication (MFA):** Add TOTP authenticator app support.
+To demonstrate end-to-end full stack proficiency, the following optional bonus features were implemented:
+1. **Pagination & Query Filtering:** Implemented on `GET /api/readings?page=1&limit=10&startDate=...&endDate=...` with full pagination metadata.
+2. **Interactive Trend Visualization:** Interactive **Recharts** line chart with customizable 7d, 14d, 30d, and 90d windowing and clinical benchmark markers.
+3. **Docker Compose:** Provided [`docker-compose.yml`](./docker-compose.yml) for one-command PostgreSQL database startup.
+4. **Comprehensive React Testing Library Suite:** 15 frontend tests validating inputs, constraint messages, and user interactions.
 
 ---
 
