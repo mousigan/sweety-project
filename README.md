@@ -215,8 +215,8 @@ Before installing, ensure the following are installed on your machine:
 
 ### Step 1: Clone the repository
 ```bash
-git clone <repository-url>
-cd kenpath-sweety
+git clone https://github.com/mousigan/sweety-project.git
+cd sweety-project
 ```
 
 ### Step 2: Configure Environment Variables
