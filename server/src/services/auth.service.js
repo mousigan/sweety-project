@@ -104,3 +104,55 @@ export const getUserById = async (userId) => {
 
   return user;
 };
+
+/**
+ * Update user profile (name and/or password).
+ * @param {number} userId
+ * @param {object} data - { name, currentPassword, newPassword }
+ * @returns {object} Updated user data without password
+ */
+export const updateUserProfile = async (userId, data) => {
+  const { name, currentPassword, newPassword } = data;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new ApiError(404, 'User not found.');
+  }
+
+  const updateData = {};
+
+  if (name && name.trim()) {
+    updateData.name = name.trim();
+  }
+
+  if (newPassword) {
+    if (!currentPassword) {
+      throw new ApiError(400, 'Current password is required to set a new password.');
+    }
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      throw new ApiError(400, 'Current password is incorrect.');
+    }
+    if (newPassword.length < 6) {
+      throw new ApiError(400, 'New password must be at least 6 characters long.');
+    }
+    updateData.password = await bcrypt.hash(newPassword, 10);
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: updateData,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return updatedUser;
+};

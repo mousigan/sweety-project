@@ -90,3 +90,21 @@ export const getMe = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * PUT /api/auth/profile
+ * Update user profile (name, password).
+ */
+export const updateProfile = async (req, res, next) => {
+  try {
+    const user = await authService.updateUserProfile(req.userId, req.body);
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully.',
+      data: { user },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
