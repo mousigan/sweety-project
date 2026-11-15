@@ -1,0 +1,43 @@
+// ============================================
+// Prisma Schema for Sweety Blood Glucose Tracker
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  readings GlucoseReading[]
+
+  @@map("users")
+}
+
+model GlucoseReading {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  date         DateTime @db.Date
+  timeSlot     String
+  glucoseValue Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Prevent duplicate readings for the same user, date, and time slot
+  @@unique([userId, date, timeSlot])
+  @@index([userId])
+  @@index([userId, date])
+  @@map("glucose_readings")
+}
